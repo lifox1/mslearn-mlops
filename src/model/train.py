@@ -14,7 +14,7 @@ def main(args):
     # enable auto logging
     mlflow.autolog()
 
-    # read data
+    # read data1
     df = get_csvs_df(args.training_data)
 
     # process data
