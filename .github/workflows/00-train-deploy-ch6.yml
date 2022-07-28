@@ -49,15 +49,10 @@ jobs:
         cd src
         az ml online-endpoint create --name mlflow-endpoint-lf -f create-endpoint.yml  
     - name: Register the model in the registry
-
-     run:  |
-
+      run: |
           JOB_NAME=$(az ml job list --query "[0].name" | tr -d '"')
-
           az ml model create --name "my-mlflow-model" \
-
                    --type "mlflow_model" \
-
                    --path "azureml://jobs/$JOB_NAME/outputs/artifacts/model"   
     - name: Deploy model to endpoint
       run: |
