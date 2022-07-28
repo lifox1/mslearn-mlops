@@ -1,6 +1,6 @@
 $schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
-name: mlflow-deployment-lf
-endpoint_name: mlflow-endpoint-lf
+name: mlflow-deployment
+endpoint_name: churn-endpoint
 model:
   name: mlflow-sklearn-model
   version: 1
