@@ -47,7 +47,7 @@ jobs:
     - name: create endpoint
       run: |
         cd src
-        az ml online-endpoint create --name mlflow-endpoint-lf3 -f create-endpoint.yml  
+        az ml online-endpoint create --name mlflow-endpoint-lf4 -f create-endpoint.yml  
     - name: Register the model in the registry
       run: |
           JOB_NAME=$(az ml job list --query "[0].name" | tr -d '"')
@@ -57,4 +57,4 @@ jobs:
     - name: Deploy model to endpoint
       run: |
         cd src   
-        az ml online-deployment create --name mlflow-deployment-lf --endpoint mlflow-endpoint-lf2 -f deployment.yml --all-traffic
+        az ml online-deployment create --name mlflow-deployment-lf --endpoint mlflow-endpoint-lf4 -f deployment.yml --all-traffic
