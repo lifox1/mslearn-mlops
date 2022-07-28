@@ -46,5 +46,6 @@ jobs:
         az configure --defaults workspace="mlw-dev-mlops"
     - name: create endpoint and deploy model
       run: |
-        az ml online-endpoint create --name diabetes-mlflow-lf --file create-endpoint.yml
-        az ml online-deployment create --name mlflow-deployment --endpoint diabetes-mlflow-lf --file mlflow-deployment.yml --all-traffic
+        cd src
+        az ml online-endpoint create --name diabetes-mlflow-lf -f create-endpoint.yml
+        az ml online-deployment create --name mlflow-deployment --endpoint diabetes-mlflow-lf -f deployment.yml --all-traffic
