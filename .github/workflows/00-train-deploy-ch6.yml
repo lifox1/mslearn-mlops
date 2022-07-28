@@ -1,0 +1,50 @@
+name: Train and deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    environment: Development
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Set Azure ML workspace as default
+      run: |
+        az configure --defaults group="rg-dev-mlops"
+        az configure --defaults workspace="mlw-dev-mlops"
+    - name: Train a classification model on diabetes data in compute cluster
+      run: |
+        cd src
+        az ml job create --file job.yml
+        
+  deploy:
+    runs-on: ubuntu-latest
+    needs: train
+    environment: Production
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Set Azure ML workspace as default
+      run: |
+        az configure --defaults group="rg-dev-mlops"
+        az configure --defaults workspace="mlw-dev-mlops"
+    - name: create endpoint and deploy model
+      run: |
+        az ml online-endpoint create --name diabetes-mlflow-lf --file create-endpoint.yml
+        az ml online-deployment create --name mlflow-deployment --endpoint diabetes-mlflow-lf --file mlflow-deployment.yml --all-traffic
